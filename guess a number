@@ -1,0 +1,96 @@
+import java.util.Random;
+import java.util.Scanner;
+
+public class GuessingGame {
+    // Variables to store the answer, user's guess, number of guesses, and high score
+    private int answer;
+    private int guess;
+    private int numOfGuesses;
+    private int highScore;
+    private boolean playAgain;
+
+    // Getter method for number of guesses
+    public int getNumOfGuesses() {
+        return numOfGuesses;
+    }
+
+    // Setter method for number of guesses
+    public void setNumOfGuesses(int numOfGuesses) {
+        this.numOfGuesses = numOfGuesses;
+    }
+
+    // Method to take user input
+    public void takeUserInput() {
+        Scanner in = new Scanner(System.in);
+        System.out.println("Enter your guess:");
+        guess = in.nextInt();
+        numOfGuesses++;
+    }
+
+    // Method to check if the guess is correct
+    public boolean isCorrect() {
+        return guess == answer;
+    }
+
+    // Method to play a single round of the game
+    public void playRound() {
+        final int MAX = 100;
+        Random rand = new Random();
+        answer = rand.nextInt(MAX) + 1;
+        numOfGuesses = 0;
+
+        // Loop until the correct guess is made
+        while (true) {
+            takeUserInput();
+
+            // Check if the guess is correct, too high, or too low
+            if (isCorrect()) {
+                System.out.println("Yes, you guessed the number.");
+                break;
+            } else if (guess > answer) {
+                System.out.println("Too high, try again");
+            } else {
+                System.out.println("Too low, try again");
+            }
+        }
+
+        // Update high score if needed
+        if (highScore == 0 || numOfGuesses < highScore) {
+            highScore = numOfGuesses;
+        }
+    }
+
+    // Method to ask if the user wants to play again
+    public void askPlayAgain() {
+        Scanner in = new Scanner(System.in);
+        System.out.println("Do you want to play again? (yes/no)");
+        String choice = in.nextLine().toLowerCase();
+        playAgain = choice.equals("yes");
+    }
+
+    // Method to display high score
+    public void displayHighScore() {
+        if (highScore > 0) {
+            System.out.println("High Score: " + highScore);
+        } else {
+            System.out.println("No high score yet. Play the game to set one!");
+        }
+    }
+
+    // Method to start the game
+    public void startGame() {
+        playAgain = true;
+        while (playAgain) {
+            playRound();
+            System.out.println("Number of guesses: " + getNumOfGuesses()); // Print the number of guesses
+            displayHighScore();
+            askPlayAgain();
+        }
+    }
+
+    // Main method to start the game
+    public static void main(String[] args) {
+        GuessingGame game = new GuessingGame(); // Create an instance of the GuessingGame class
+        game.startGame(); // Start the game
+    }
+}
